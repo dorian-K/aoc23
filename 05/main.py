@@ -45,7 +45,7 @@ for (fro, to) in maps.keys():
 
 for (start, length) in seeds:
     progress["seed"].append((start, length))
-    print((start, length))
+    # print((start, length))
 
 changed = True
 while changed == True:
@@ -54,27 +54,38 @@ while changed == True:
 
         map = maps[(fro, to)]
         while(len(progress[fro]) > 0):
+            #
             changed = True
             (neededStart, neededLen) = progress[fro].pop()
+            print((neededStart, neededLen))
 
             while neededLen > 0:
                 closest = neededLen
                 for (sourceStart, destStart, realLen) in map:
-                    if neededStart >= sourceStart and neededStart < sourceStart + leng:
-                        usedLen = realLen - (sourceStart - neededStart)
+                    if neededStart >= sourceStart and neededStart < sourceStart + realLen:
+                        usedLen = realLen - (neededStart - sourceStart)
+                        assert usedLen > 0
+                        if to == "location":
+                            ends.append((destStart + (neededStart - sourceStart), min(usedLen, neededLen)))
+                        else:
+                            progress[to].append((destStart + (neededStart - sourceStart), min(usedLen, neededLen)))
+                        # print("1->", (destStart + (neededStart - sourceStart), min(usedLen, neededLen)))
                         neededLen -= usedLen
-                        progress[to].append((destStart + (sourceStart - neededStart), usedLen))
+                        neededStart += usedLen
                         closest = 0
                         break
                     
                     if sourceStart > neededStart:
                         closest = min(closest, sourceStart - neededStart)
                 if closest > 0:
-                    neededLen -= closest
                     if to == "location":
-                        ends.append((neededStart, closest))
+                        ends.append((neededStart, min(neededLen, closest)))
                     else:
-                        progress[to].append((neededStart, closest))
+                        progress[to].append((neededStart, min(neededLen, closest)))
+                    # print("2->", (neededStart, min(neededLen, closest)))
+                    neededLen -= closest
+                    neededStart += closest
 
 print(progress)
 print(ends)
+print(min(ends, key=lambda x: x[0]))
