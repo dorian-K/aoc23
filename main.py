@@ -1,5 +1,6 @@
 import re
 import numpy
+import functools
 
 mint = lambda t: re.search("[0-9]+", t)
 def ints(x: str):
