@@ -89,3 +89,4 @@ while changed == True:
 print(progress)
 print(ends)
 print(min(ends, key=lambda x: x[0]))
+print(sum([x[1] for x in ends]))

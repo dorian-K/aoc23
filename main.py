@@ -1,10 +1,11 @@
 import re
 import numpy
 import functools
+import math
 
-mint = lambda t: re.search("[0-9]+", t)
+mint = lambda t: re.search("-?[0-9]+", t)
 def ints(x: str):
-    m = re.findall("[0-9]+", x)
+    m = re.findall("-?[0-9]+", x)
     m = [int(x) for x in m]
     return m
 
